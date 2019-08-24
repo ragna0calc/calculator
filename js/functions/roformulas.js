@@ -3089,44 +3089,8 @@ function calcASPD()
 
 	//increase agi +10% aspd
 	aspdMultiplier += acolyteBuffs[ksIncreaseAgi];
-		
-
-	var aspdPotion = 0;
-	// Items
-	if ( usableItems[ksAttackSpeed] || usableItems[ksGuaranaCandy] )
-	{ // non-stackable speed pots
-	
-		if ( usableItems[ksAttackSpeed] === spdpot_CONC || usableItems[ksGuaranaCandy] )
-		{ // Concentration Postion and Guarana Candy (per Lord Novice)
-			aspdPotion = 4;
-		}
-		if ( usableItems[ksAttackSpeed] === spdpot_AWAK )
-		{ // Awakening Potion
-			aspdPotion = 6;
-		}
-		if ( usableItems[ksAttackSpeed] === spdpot_BERSERK )
-		{ // Berserk Potion
-			aspdPotion = 9;
-		}
-	}
-	
-	
-	var skillPotBonus = n_A_AGI * aspdPotion / 200;
-
-	var statSkillAspd = 0; 
 
 
-	if(n_A_WeaponType != weapTyp_BOW && n_A_WeaponType != weapTyp_INSTRU && n_A_WeaponType != weapTyp_WHIP)
-		statSkillAspd = Math.floor(jobASPD+statASPD+ skillPotBonus);
-	else
-		statSkillAspd = Math.floor(jobASPD+statASPDBow+ skillPotBonus);
-	
-
-	var percentBonus = (195 - statSkillAspd) * (aspdMultiplier/100);
-	// Calculate ASPD -----------------------------------------
-	n_A_ASPD = Math.floor(statSkillAspd + percentBonus);
-	
-	// Equipment ASPD -----------------------------------------
 	var equipASPD = n_tok[bon_ASPD_MUL];
 	if ( EquipNumSearch( 654 ) )
 	{ // Western Outlaw
@@ -3238,11 +3202,48 @@ function calcASPD()
 		if (n_A_BaseLV >= 100) { equipASPD += 1; }
 		if (n_A_BaseLV >= 150) { equipASPD += 1; }
 	}
+
+	aspdMultiplier += equipASPD;
+
+
+	var aspdPotion = 0;
+	// Items
+	if ( usableItems[ksAttackSpeed] || usableItems[ksGuaranaCandy] )
+	{ // non-stackable speed pots
+	
+		if ( usableItems[ksAttackSpeed] === spdpot_CONC || usableItems[ksGuaranaCandy] )
+		{ // Concentration Postion and Guarana Candy (per Lord Novice)
+			aspdPotion = 4;
+		}
+		if ( usableItems[ksAttackSpeed] === spdpot_AWAK )
+		{ // Awakening Potion
+			aspdPotion = 6;
+		}
+		if ( usableItems[ksAttackSpeed] === spdpot_BERSERK )
+		{ // Berserk Potion
+			aspdPotion = 9;
+		}
+	}
 	
 	
-	equipASPD = equipASPD / 100.0
-	percentAspdEquipment = (195 - n_A_ASPD) * equipASPD;
-	n_A_ASPD += percentAspdEquipment;
+	var skillPotBonus = n_A_AGI * aspdPotion / 200;
+
+	var statSkillAspd = 0; 
+
+
+	if(n_A_WeaponType != weapTyp_BOW && n_A_WeaponType != weapTyp_INSTRU && n_A_WeaponType != weapTyp_WHIP)
+		statSkillAspd = Math.floor(jobASPD+statASPD+ skillPotBonus);
+	else
+		statSkillAspd = Math.floor(jobASPD+statASPDBow+ skillPotBonus);
+	
+
+	var percentBonus = (195 - statSkillAspd) * (aspdMultiplier/100);
+	// Calculate ASPD -----------------------------------------
+	n_A_ASPD = Math.floor(statSkillAspd + percentBonus);
+	
+	// Equipment ASPD -----------------------------------------
+	
+	
 	
 	// flat ASPD bonuses --------------------------------------
 	var flatASPD = n_tok[bon_ASPD_ADD];
